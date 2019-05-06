@@ -56,11 +56,11 @@
 			isa = PBXGroup;
 			children = (
 				E18A87F21C7A237B00825AE3 /* AppDelegate.swift */,
-				E18A87F41C7A237B00825AE3 /* ViewController.swift */,
 				E18A87F61C7A237B00825AE3 /* Assets.xcassets */,
-				E18A87F81C7A237B00825AE3 /* Main.storyboard */,
 				E18A87FB1C7A237B00825AE3 /* Info.plist */,
+				E18A87F81C7A237B00825AE3 /* Main.storyboard */,
 				E18A88071C7A23DD00825AE3 /* MediaKeyTap.framework */,
+				E18A87F41C7A237B00825AE3 /* ViewController.swift */,
 			);
 			path = MediaKeyTapExample;
 			sourceTree = "<group>";
@@ -136,8 +136,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E18A87F51C7A237B00825AE3 /* ViewController.swift in Sources */,
 				E18A87F31C7A237B00825AE3 /* AppDelegate.swift in Sources */,
+				E18A87F51C7A237B00825AE3 /* ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
