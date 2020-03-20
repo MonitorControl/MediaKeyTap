@@ -10,11 +10,11 @@ import Foundation
 
 extension NSEvent {
   var isKeyEvent: Bool {
-    return subtype.rawValue == 8
+    subtype.rawValue == 8
   }
 
   var keycode: Keycode {
-    return Keycode((data1 & 0xFFFF_0000) >> 16)
+    Keycode((data1 & 0xFFFF_0000) >> 16)
   }
 
   var keyEvent: KeyEvent {

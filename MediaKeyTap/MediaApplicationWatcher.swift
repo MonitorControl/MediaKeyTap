@@ -38,20 +38,26 @@ class MediaApplicationWatcher {
   func start() {
     let notificationCenter = NSWorkspace.shared.notificationCenter
 
-    notificationCenter.addObserver(self,
-                                   selector: #selector(self.applicationLaunched),
-                                   name: NSWorkspace.didLaunchApplicationNotification,
-                                   object: nil)
+    notificationCenter.addObserver(
+      self,
+      selector: #selector(self.applicationLaunched),
+      name: NSWorkspace.didLaunchApplicationNotification,
+      object: nil
+    )
 
-    notificationCenter.addObserver(self,
-                                   selector: #selector(self.applicationActivated),
-                                   name: NSWorkspace.didActivateApplicationNotification,
-                                   object: nil)
+    notificationCenter.addObserver(
+      self,
+      selector: #selector(self.applicationActivated),
+      name: NSWorkspace.didActivateApplicationNotification,
+      object: nil
+    )
 
-    notificationCenter.addObserver(self,
-                                   selector: #selector(self.applicationTerminated),
-                                   name: NSWorkspace.didTerminateApplicationNotification,
-                                   object: nil)
+    notificationCenter.addObserver(
+      self,
+      selector: #selector(self.applicationTerminated),
+      name: NSWorkspace.didTerminateApplicationNotification,
+      object: nil
+    )
 
     self.setupDistributedNotifications()
   }
@@ -186,6 +192,6 @@ class MediaApplicationWatcher {
   }
 
   private func whitelisted(_ application: NSRunningApplication) -> Bool {
-    return self.inStaticWhitelist(application) || self.inDynamicWhitelist(application)
+    self.inStaticWhitelist(application) || self.inDynamicWhitelist(application)
   }
 }
