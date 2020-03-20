@@ -25,6 +25,14 @@ extension EventTapError: CustomStringConvertible {
   }
 }
 
+func mainScreen() -> NSScreen? {
+  let mouseLocation = NSEvent.mouseLocation
+  let screens = NSScreen.screens
+  let screenWithMouse = (screens.first { NSMouseInRect(mouseLocation, $0.frame, false) })
+
+  return screenWithMouse
+}
+
 protocol MediaKeyTapInternalsDelegate {
   var keysToWatch: [MediaKey] { get set }
   var observeBuiltIn: Bool { get set }
@@ -88,9 +96,15 @@ class MediaKeyTapInternals {
   }
 
   func stopWatchingMediaKeys() {
-    CFRunLoopSourceInvalidate <^> self.runLoopSource
-    CFRunLoopStop <^> self.runLoop
-    CFMachPortInvalidate <^> self.keyEventPort
+    if let runLoopSource = self.runLoopSource {
+      CFRunLoopSourceInvalidate(runLoopSource)
+    }
+    if let runLoop = self.runLoop {
+      CFRunLoopStop(runLoop)
+    }
+    if let keyEventPort = self.keyEventPort {
+      CFMachPortInvalidate(keyEventPort)
+    }
   }
 
   private func handle(event: CGEvent, ofType type: CGEventType) -> CGEvent? {
@@ -99,7 +113,7 @@ class MediaKeyTapInternals {
       guard let mediaKey = MediaKeyTap.functionKeyCodeToMediaKey(Int32(keycode)) else { return event }
       if self.delegate?.keysToWatch.contains(mediaKey) ?? false {
         if self.delegate?.observeBuiltIn ?? true == false {
-          if let id = NSScreen.main?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID {
+          if let id = mainScreen()?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID {
             if CGDisplayIsBuiltin(id) != 0 {
               return event
             }
@@ -123,7 +137,7 @@ class MediaKeyTapInternals {
       else { return event }
 
       if self.delegate?.observeBuiltIn ?? true == false {
-        if let id = NSScreen.main?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID {
+        if let id = mainScreen()?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID {
           if CGDisplayIsBuiltin(id) != 0 {
             return event
           }

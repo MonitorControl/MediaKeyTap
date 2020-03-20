@@ -30,10 +30,6 @@ class MediaApplicationWatcher {
     self.dynamicWhitelist = []
   }
 
-  deinit {
-    stop()
-  }
-
   /// Activate the currently running application (without an NSNotification)
   func activate() {
     self.handleApplicationActivation(application: NSRunningApplication.current)
@@ -180,11 +176,13 @@ class MediaApplicationWatcher {
   }
 
   private func inStaticWhitelist(_ application: NSRunningApplication) -> Bool {
-    return (self.whitelistedApplicationIdentifiers().contains <^> application.bundleIdentifier) ?? false
+    guard let id = application.bundleIdentifier else { return false }
+    return self.whitelistedApplicationIdentifiers().contains(id) ?? false
   }
 
   private func inDynamicWhitelist(_ application: NSRunningApplication) -> Bool {
-    return (self.dynamicWhitelist.contains <^> application.bundleIdentifier) ?? false
+    guard let id = application.bundleIdentifier else { return false }
+    return self.dynamicWhitelist.contains(id) ?? false
   }
 
   private func whitelisted(_ application: NSRunningApplication) -> Bool {
