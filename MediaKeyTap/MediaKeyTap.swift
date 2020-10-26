@@ -104,11 +104,11 @@ public class MediaKeyTap {
 
   /// Stop the key tap
   open func stop() {
-    self.mediaApplicationWatcher.delegate = nil
     self.mediaApplicationWatcher.stop()
-
-    self.internals.delegate = nil
     self.internals.stopWatchingMediaKeys()
+
+    self.mediaApplicationWatcher.delegate = nil
+    self.internals.delegate = nil
   }
 
   public static func keycodeToMediaKey(_ keycode: Keycode) -> MediaKey? {

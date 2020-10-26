@@ -112,7 +112,7 @@ class MediaKeyTapInternals {
       let keycode: Int64 = event.getIntegerValueField(.keyboardEventKeycode)
       guard let mediaKey = MediaKeyTap.functionKeyCodeToMediaKey(Int32(keycode)) else { return event }
       if self.delegate?.keysToWatch.contains(mediaKey) ?? false {
-        if self.delegate?.observeBuiltIn ?? true == false {
+        if !(self.delegate?.observeBuiltIn ?? true) {
           if let id = mainScreen()?.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? CGDirectDisplayID {
             if CGDisplayIsBuiltin(id) != 0 {
               return event
