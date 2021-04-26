@@ -37,7 +37,7 @@ protocol MediaKeyTapInternalsDelegate: class {
     var keysToWatch: [MediaKey] { get set }
     var observeBuiltIn: Bool { get set }
     func updateInterceptMediaKeys(_ intercept: Bool)
-    func handle(keyEvent: KeyEvent, isFunctionKey: Bool, modifiers: NSEvent.ModifierFlags?)
+    func handle(keyEvent: KeyEvent, isFunctionKey: Bool, modifiers: NSEvent.ModifierFlags?, event: CGEvent) -> CGEvent?
     func isInterceptingMediaKeys() -> Bool
 }
 
@@ -122,13 +122,12 @@ class MediaKeyTapInternals {
                     }
                 }
 
-                delegate?.handle(
+                return delegate?.handle(
                     keyEvent: KeyEvent(keycode: Int32(keycode), keyFlags: 0, keyPressed: true, keyRepeat: false),
                     isFunctionKey: true,
-                    modifiers: NSEvent(cgEvent: event)?.modifierFlags
+                    modifiers: NSEvent(cgEvent: event)?.modifierFlags,
+                    event: event
                 )
-
-                return nil
             } else {
                 return event
             }
@@ -149,9 +148,7 @@ class MediaKeyTapInternals {
                     }
                 }
             }
-            delegate?.handle(keyEvent: nsEvent.keyEvent, isFunctionKey: false, modifiers: nsEvent.modifierFlags)
-
-            return nil
+            return delegate?.handle(keyEvent: nsEvent.keyEvent, isFunctionKey: false, modifiers: nsEvent.modifierFlags, event: event)
         }
 
         return event

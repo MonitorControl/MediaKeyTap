@@ -38,7 +38,7 @@ public struct KeyEvent {
 }
 
 public protocol MediaKeyTapDelegate: class {
-    func handle(mediaKey: MediaKey, event: KeyEvent?, modifiers: NSEvent.ModifierFlags?)
+    func handle(mediaKey: MediaKey, event: KeyEvent?, modifiers: NSEvent.ModifierFlags?, event: CGEvent) -> CGEvent?
 }
 
 public class MediaKeyTap {
@@ -174,14 +174,15 @@ extension MediaKeyTap: MediaKeyTapInternalsDelegate {
         interceptMediaKeys = intercept
     }
 
-    func handle(keyEvent: KeyEvent, isFunctionKey: Bool, modifiers: NSEvent.ModifierFlags?) {
+    func handle(keyEvent: KeyEvent, isFunctionKey: Bool, modifiers: NSEvent.ModifierFlags?, event: CGEvent) -> CGEvent? {
         if let key = isFunctionKey ? MediaKeyTap.functionKeyCodeToMediaKey(keyEvent.keycode) : MediaKeyTap
             .keycodeToMediaKey(keyEvent.keycode)
         {
             if shouldNotifyDelegate(ofEvent: keyEvent) {
-                delegate.handle(mediaKey: key, event: keyEvent, modifiers: modifiers)
+                return delegate.handle(mediaKey: key, event: keyEvent, modifiers: modifiers, event: event)
             }
         }
+        return event
     }
 
     func isInterceptingMediaKeys() -> Bool {
